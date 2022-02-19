@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Tempo de espera</title>
+    <link rel="icon" type="image/x-icon" href="/map.png">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            margin-top: 15%;
+            margin-bottom: 10%;
+        }
+
+        .form {
+            padding: 20px 20px 20px 20px;
+            background-color: #fff;
+        }
+
+        #loading {
+            display: 'none';
+        }
+    </style>
+</head>
+<body onload="connectClient()">
+    <div class="col-md-4 offset-md-4">
+        <div class="header">
+            <h1 style="text-align:center; margin-bottom:5%">Quando vem o próximo?</h1>
+
+            <h4 style="text-align:center;">Consulta o tempo de espera para o metro e autocarros de Lisboa</h4>
+        </div>
+
+        <div class="jumbotron text-center" id="jumbotron" style="display:none">
+            <h1 class="display-4" id="info">00:00</h1>    
+            <div class="spinner-border text-center text-info " role="status" id="loading" style="margin-left: auto; margin-right:auto">
+                <span class="sr-only" style="text-align: center">Loading...</span>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Metro</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">Bus</a>
+            </li>
+        </ul>
+        <div class="border border-top-0 rounded-bottom">
+        <div class="form">
+            <form action="http://localhost:3000/metro" method="get" id="request">
+                <label for="line">Linha:</label><br>
+                <select id="line" name="line" class="form-control">
+                    <option value="Amarela">Amarela</option>
+                    <option value="Vermelha">Vermelha</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Azul">Azul</option>
+                </select>
+                <br>
+                <label for="station">Estação:</label><br>
+                <select id="station" name="station" class="form-control">
+                    <option>Odivelas</option>
+                    <option>Cabo Ruivo</option>
+                    <option>Alameda</option>
+                    <option>Saldanha</option>
+                </select>
+                <br>
+                <label for="destination">Destino:</label><br>
+                <select id="destination" name="destination" class="form-control">
+                    <option value="Aeroporto">Aeroporto</option>
+                    <option value="São Sebastião">São Sebastião</option>
+                </select>
+                <br>
+
+                <input type="submit" id="submit" class="btn btn-info">
+            </form>
+        </div>
+    </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
