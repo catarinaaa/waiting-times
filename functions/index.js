@@ -1,3 +1,4 @@
+const functions = require("firebase-functions");
 const express = require('express');
 const https = require('https');
 const cors = require('cors')
@@ -6,9 +7,17 @@ const { json } = require('express/lib/response');
 const res = require('express/lib/response');
 const app = express();
 
-let token = ''; 
-const stationCodes = new Map();
-const destinationCodes = new Map();
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+//
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//   functions.logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
+
+//let token = ''; 
+//const stationCodes = new Map();
+//const destinationCodes = new Map();
 app.use(cors());
 app.options('*', cors());
 
@@ -18,7 +27,7 @@ app.use(express.urlencoded({
 
 
 // Starts app
-app.get('/', async (request, response) => {
+app.get('/', (request, response) => {
     var tokenOptions = {
         host: 'api.metrolisboa.pt',
         port: '8243',
@@ -28,15 +37,16 @@ app.get('/', async (request, response) => {
         'Content-Type': 'application/x-www-form-urlencoded'
         }
     };
-
-    doRequest(tokenOptions).then((data) => {token = data.access_token});
+    let token = '';
+    doRequest(tokenOptions).then((data) => {token = data.access_token; console.log(token)});
     //TODO: handle async and error
-    storeStationCodes();
-    storeDestinationCodes();
+    //storeStationCodes();
+    //storeDestinationCodes();
 });
 
 //requestToken(); TODO: maybe better
-app.listen(process.env.PORT || 3000, () => console.log("Server available on http://localhost:3000"))
+//app.listen(process.env.PORT || 3000, () => console.log("Server available on http://localhost:3000"))
+exports.app = functions.https.onRequest(app);
 
 // Request for 
 app.get('/metro', async (request, response) => {
@@ -105,86 +115,15 @@ function doRequest(options) {
     });
 }
 
-
-/**
- * Returns id of the station name given
- *
- * @param {String} station name
- * @return {String} stations id
- */
-/*function findStationCode(s) {
-    if(stationCodes.get(s) != undefined)
-        return stationCodes.get(s);
-    
-    var optionsCodes = {
-        host: 'api.metrolisboa.pt',
-        port: '8243',
-        path: '/estadoServicoML/1.0.1/infoEstacao/todos',
-        method: 'GET',
-        headers : { 'Authorization' : `Bearer ${token}`,
-        'accept': 'application/json'}
-    }
-    
-    res = doRequestSync(optionsCodes) 
-    console.log("RES: " + res);
-    
-    dataJSON = JSON.parse(res);
-    for (const el of dataJSON.resposta) {
-        connsole.log(el);
-        if(el.stop_name == s) {
-            stationCodes.set(s, stop_id);
-            return stop_id;
-        }
-    }*/
-    /*const req = https.request(optionsCodes, function(res) {
-        console.log('STATUS: ' + res.statusCode);
-        res.setEncoding('utf8');
-        res.on('data', d => {
-            json = JSON.parse(d);
-            for (const el of json.resposta) {
-                connsole.log(el);
-                if(el.stop_name == s) {
-                    stationCodes.set(s, stop_id);
-                    return stop_id;
-                }
-            }
-        });
-    });
-    
-    req.on('error', function(e) {
-        console.error('ERROR: ' + e.message);
-    });
-
-    req.end();
-}*/
-
 function processError(err) {
     console.error("ERROR: " + err);
 }
 
-// Request access token on load
-/*function requestToken() {
-    var req = https.request(tokenOptions, function(res) {
-        console.log('STATUS: ' + res.statusCode);
-        res.setEncoding('utf8');
-        res.on('data', d => {
-            console.log('Token process success');
-            token = JSON.parse(d).access_token;
-        });
-    });
-
-    req.on('error', function(e) {
-        console.error('ERROR: ' + e.message);
-    });
-
-    req.write('grant_type=client_credentials');
-    req.end();
-}*/
-
 /**
- * Saves stations codes
+ * Returns stations codes
  */
 function storeStationCodes() {
+    const stationCodes = new Map();
     var optionsCodes = {
         host: 'api.metrolisboa.pt',
         port: '8243',
@@ -201,7 +140,12 @@ function storeStationCodes() {
     });
 }
 
+
+/**
+ * Returns destination codes
+ */
 function storeDestinationCodes() {
+    const destinationCodes = new Map();
     var optionsCodes = {
         host: 'api.metrolisboa.pt',
         port: '8243',
