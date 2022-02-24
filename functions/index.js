@@ -68,8 +68,6 @@ app.get('/metro', (request, response) => {
                         for(const el in data.resposta) {
                             if(data.resposta[el].hasOwnProperty('destino')) {
                                 if(data.resposta[el].destino == destinationCodes.get(request.query.destination)) {
-                                    console.log("CODIGOS: " + destination);
-                                    console.log("CHEGOU: " + request.query.destination);
                                     result = data.resposta[el];
                                     console.log(data.resposta[el]);
                                     response.send(data.resposta[el]); 
