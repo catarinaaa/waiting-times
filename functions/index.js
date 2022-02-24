@@ -10,13 +10,6 @@ const axios = require('axios');
 //const res = require('express/lib/response');
 const app = express();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
 
 //let token = ''; 
 //const stationCodes = new Map();
@@ -58,7 +51,7 @@ app.get('/metro', (request, response) => {
         storeStationCodes(token).then((stationCodes) => {
             console.log("FINISHED STATIONS!" + stationCodes);
             storeDestinationCodes(token).then((destinationCodes) => {
-                console.log("FINISHED ALL!" + stationCodes.get(request.query.station) + " " + destinationCodes.get(request.query.destination));
+                //console.log("FINISHED ALL!" + stationCodes.get(request.query.station) + " " + destinationCodes.get(request.query.destination));
                 var optionsMetro = {
                     url: `https://api.metrolisboa.pt:8243/estadoServicoML/1.0.1/tempoEspera/Estacao/${stationCodes.get(request.query.station)}`,
                     host: 'api.metrolisboa.pt',
@@ -68,22 +61,25 @@ app.get('/metro', (request, response) => {
                     headers : { 'Authorization' : `Bearer ${token}`,
                     'accept': 'application/json'}
                 }
-            
+                const destination = destinationCodes.get(request.query.destination);
                 let result = null;
                 doRequest(optionsMetro).then((data) => {
                     if(data.codigo == "200") {
                         for(const el in data.resposta) {
                             if(data.resposta[el].hasOwnProperty('destino')) {
-                                if(data.resposta[el].destino == destinationCodes.get(request.query.destination))
-                                    console.log(data.resposta[el]);
+                                if(data.resposta[el].destino == destinationCodes.get(request.query.destination)) {
+                                    console.log("CODIGOS: " + destination);
+                                    console.log("CHEGOU: " + request.query.destination);
                                     result = data.resposta[el];
+                                    console.log(data.resposta[el]);
+                                    response.send(data.resposta[el]); 
+                                    return;
+                                }
                             }
                         }
             
-                    } else {
-            
                     }       
-                    console.log("result" + result);
+                    console.log("RESULT: " + result.resposta);
                     response.send(result); 
             });
         });
@@ -113,7 +109,7 @@ function doRequest(options) {
         });
 
         res.on('end', () => {
-            console.log(responseBody);
+            //console.log(responseBody);
             resolve(JSON.parse(responseBody));
         });
         });
@@ -125,7 +121,6 @@ function doRequest(options) {
         if(options.method == 'POST')
             req.write('grant_type=client_credentials');
         req.end();
-
     
     /*/console.log(options);
     axios(options).then(function (response) {
