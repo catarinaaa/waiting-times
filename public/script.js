@@ -9,7 +9,7 @@ const stations = document.querySelector('#station');
 const destinations = document.querySelector('#destination');
 
 // Variables
-const host = 'http://localhost:3000';
+const host = 'https://europe-west1-waiting-times-58472.cloudfunctions.net/app';
 const listStations = new Map();
 listStations.set('Amarela', ['Odivelas', 'Senhor Roubado', 'Ameixoeira', 'Lumiar', 'Quinta das Conchas', 'Campo Grande', 'Cidade Universitária', 'Entrecampos', 'Campo Pequeno','Saldanha', 'Picoas', 'Marquês de Pombal', 'Rato']);
 listStations.set('Azul', ['Reboleira', 'Amadora Este', 'Alfornelos', 'Pontinha', 'Carnide', 'Colégio Militar', 'Alto dos Moinhos', 'Laranjeiras', 'Jardim Zoológico', 'Praça de Espanha', 'São Sebastião', 'Parque', 'Marquês de Pombal', 'Avenida', 'Restauradores', 'Baixa-Chiado', 'Terreiro do Paço', 'Santa Apolónia']);
@@ -26,13 +26,13 @@ submit.addEventListener('submit', processRequest);
 line.addEventListener('change', updateStations);
 
 //Functions
-function connectClient() {
-    fetch(host); 
-}
+//function connectClient() {
+//    fetch(host); 
+//}
 
 function processRequest(e) {
-        jumbotron.style.display = 'block';
-loading.style.display = "block";
+    jumbotron.style.display = 'block';
+    loading.style.display = "block";
     info.style.display = "none";
     var formData = new FormData(form);
     e.preventDefault();
