@@ -23,7 +23,6 @@ app.get('/metro', (request, response) => {
     requestToken().then((token) => {
         console.log(token);
         storeStationCodes(token).then((stationCodes) => {
-            console.log("FINISHED STATIONS!" + stationCodes);
             storeDestinationCodes(token).then((destinationCodes) => {
                 var optionsMetro = {
                     url: `https://api.metrolisboa.pt:8243/estadoServicoML/1.0.1/tempoEspera/Estacao/${stationCodes.get(request.query.station)}`,
