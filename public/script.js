@@ -12,9 +12,9 @@ const destinations = document.querySelector('#destination');
 const host = 'https://europe-west1-waiting-times-58472.cloudfunctions.net/app';
 const listStations = new Map();
 listStations.set('Amarela', ['Odivelas', 'Senhor Roubado', 'Ameixoeira', 'Lumiar', 'Quinta das Conchas', 'Campo Grande', 'Cidade Universitária', 'Entrecampos', 'Campo Pequeno','Saldanha', 'Picoas', 'Marquês de Pombal', 'Rato']);
-listStations.set('Azul', ['Reboleira', 'Amadora Este', 'Alfornelos', 'Pontinha', 'Carnide', 'Colégio Militar', 'Alto dos Moinhos', 'Laranjeiras', 'Jardim Zoológico', 'Praça de Espanha', 'São Sebastião', 'Parque', 'Marquês de Pombal', 'Avenida', 'Restauradores', 'Baixa-Chiado', 'Terreiro do Paço', 'Santa Apolónia']);
+listStations.set('Azul', ['Reboleira', 'Amadora Este', 'Alfornelos', 'Pontinha', 'Carnide', 'Colégio Militar', 'Alto dos Moinhos', 'Laranjeiras', 'Jardim Zoológico', 'Praça de Espanha', 'São Sebastião', 'Parque', 'Marquês de Pombal', 'Avenida', 'Restauradores', 'Baixa Chiado', 'Terreiro do Paço', 'Santa Apolónia']);
 listStations.set('Vermelha', ['Aeroporto', 'Encarnação', 'Moscavide', 'Oriente', 'Cabo Ruivo', 'Olivais', 'Chelas', 'Bela Vista', 'Olaias', 'Alameda', 'Saldanha', 'São Sebastião']);
-listStations.set('Verde', ['Telheiras', 'Campo Grande', 'Alvalade', 'Roma', 'Areeiro', 'Alameda', 'Arroios', 'Anjos', 'Intendente', 'Martim Moniz', 'Rossio', 'Baixa-Chiado', 'Cais do Sodré']);
+listStations.set('Verde', ['Telheiras', 'Campo Grande', 'Alvalade', 'Roma', 'Areeiro', 'Alameda', 'Arroios', 'Anjos', 'Intendente', 'Martim Moniz', 'Rossio', 'Baixa Chiado', 'Cais do Sodré']);
 const listDestination = new Map();
 listDestination.set('Amarela', ['Odivelas', 'Rato']);
 listDestination.set('Azul', ['Reboleira', 'Santa Apolónia']);
@@ -24,6 +24,7 @@ listDestination.set('Verde', ['Telheiras', 'Cais do Sodré']);
 // Event listeners
 submit.addEventListener('submit', processRequest);
 line.addEventListener('change', updateStations);
+stations.addEventListener('change', updateDestination);
 
 //Functions
 //function connectClient() {
@@ -53,17 +54,34 @@ function processRequest(e) {
 
 function updateStations(e) {
     stations.innerHTML = '';
-    for(const el of listStations.get(this.value)) {
+    default_val = this.value == null ? 'Vermelha' : this.value;
+    for(const el of listStations.get(default_val)) {
         var opt = document.createElement('option');
         opt.value = el;
         opt.innerHTML = el;
         stations.appendChild(opt);
     }
-    destinations.innerHTML = '';
-    for(const el of listDestination.get(this.value)) {
+    updateDestination(e); // updates destination dropdown after changed value in line
+    /*destinations.innerHTML = '';
+     for(const el of listDestination.get(this.value)) {
         var opt = document.createElement('option');
         opt.value = el;
         opt.innerHTML = el;
         destinations.appendChild(opt);
+    } */
+}
+
+function updateDestination(e) {
+    destinations.innerHTML = '';
+    default_val = line.value == null ? 'Vermelha' : line.value;
+    for(const el of listDestination.get(default_val)) {
+        // edge case if station chosen only has one destination (when its end of line)
+        
+        if(el != stations.value) {
+            var opt = document.createElement('option');
+            opt.value = el;
+            opt.innerHTML = el;
+            destinations.appendChild(opt);
+        }
     }
 }
