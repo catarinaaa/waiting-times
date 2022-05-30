@@ -8,7 +8,7 @@ const axios = require('axios');
 const app = express();
 
 app.use(cors());
-app.options('*', cors());
+//app.options('*', cors());
 
 app.use(express.urlencoded({
     extended: true
@@ -55,6 +55,23 @@ app.get('/metro', (request, response) => {
 });
 });
 
+/**
+ * Endpoints to retrieve full information 
+ */
+app.get('/info', (request, response) => { 
+    requestToken().then((token) => {
+        var options = {
+            host: 'api.metrolisboa.pt',
+            port: '8243',
+            path: '/estadoServicoML/1.0.1/infoEstacao/todos',
+            method: 'GET',
+            headers : { 'Authorization' : `Bearer ${token}`,
+            'accept': 'application/json'}
+        }
+
+        doRequest(options).then((data) => {response.send(data);});
+    });
+});
 
 
 /**
