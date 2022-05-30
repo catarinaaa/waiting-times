@@ -26,11 +26,6 @@ submit.addEventListener('submit', processRequest);
 line.addEventListener('change', updateStations);
 stations.addEventListener('change', updateDestination);
 
-//Functions
-//function connectClient() {
-//    fetch(host); 
-//}
-
 function processRequest(e) {
     jumbotron.style.display = 'block';
     loading.style.display = "block";
@@ -61,14 +56,8 @@ function updateStations(e) {
         opt.innerHTML = el;
         stations.appendChild(opt);
     }
-    updateDestination(e); // updates destination dropdown after changed value in line
-    /*destinations.innerHTML = '';
-     for(const el of listDestination.get(this.value)) {
-        var opt = document.createElement('option');
-        opt.value = el;
-        opt.innerHTML = el;
-        destinations.appendChild(opt);
-    } */
+    // updates destination dropdown after changed value in line
+    updateDestination(e); 
 }
 
 function updateDestination(e) {
@@ -76,7 +65,6 @@ function updateDestination(e) {
     default_val = line.value == null ? 'Vermelha' : line.value;
     for(const el of listDestination.get(default_val)) {
         // edge case if station chosen only has one destination (when its end of line)
-        
         if(el != stations.value) {
             var opt = document.createElement('option');
             opt.value = el;
