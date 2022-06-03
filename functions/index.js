@@ -1,18 +1,18 @@
 const functions = require("firebase-functions");
 const express = require('express');
 const https = require('https');
-const cors = require('cors')
+const cors = require('cors');
 const config = require('./config.js');
 const axios = require('axios');
 
 const app = express();
 
-app.use(cors());
-//app.options('*', cors());
+app.use(cors({origin: true}));
+app.options('*', cors());
 
 app.use(express.urlencoded({
     extended: true
-}))
+}));
 
 //app.listen(process.env.PORT || 3000, () => console.log("Server available on http://localhost:3000"))
 
