@@ -11,10 +11,10 @@ const destinations = document.querySelector('#destination');
 // Variables
 const host = 'https://europe-west1-waiting-times-58472.cloudfunctions.net/app';
 const listStations = new Map();
-listStations.set('Amarela', ['Odivelas', 'Senhor Roubado', 'Ameixoeira', 'Lumiar', 'Quinta das Conchas', 'Campo Grande', 'Cidade Universitária', 'Entrecampos', 'Campo Pequeno','Saldanha', 'Picoas', 'Marquês de Pombal', 'Rato']);
-listStations.set('Azul', ['Reboleira', 'Amadora Este', 'Alfornelos', 'Pontinha', 'Carnide', 'Colégio Militar', 'Alto dos Moinhos', 'Laranjeiras', 'Jardim Zoológico', 'Praça de Espanha', 'São Sebastião', 'Parque', 'Marquês de Pombal', 'Avenida', 'Restauradores', 'Baixa Chiado', 'Terreiro do Paço', 'Santa Apolónia']);
+listStations.set('Amarela', ['Odivelas', 'Senhor Roubado', 'Ameixoeira', 'Lumiar', 'Quinta das Conchas', 'Campo Grande', 'Cidade Universitária', 'Entre Campos', 'Campo Pequeno','Saldanha', 'Picoas', 'Marquês de Pombal', 'Rato']);
+listStations.set('Azul', ['Reboleira', 'Amadora Este', 'Alfornelos', 'Pontinha', 'Carnide', 'Colégio Militar/Luz', 'Alto dos Moinhos', 'Laranjeiras', 'Jardim Zoológico', 'Praça de Espanha', 'São Sebastião', 'Parque', 'Marquês de Pombal', 'Avenida', 'Restauradores', 'Baixa/Chiado', 'Terreiro do Paço', 'Santa Apolónia']);
 listStations.set('Vermelha', ['Aeroporto', 'Encarnação', 'Moscavide', 'Oriente', 'Cabo Ruivo', 'Olivais', 'Chelas', 'Bela Vista', 'Olaias', 'Alameda', 'Saldanha', 'São Sebastião']);
-listStations.set('Verde', ['Telheiras', 'Campo Grande', 'Alvalade', 'Roma', 'Areeiro', 'Alameda', 'Arroios', 'Anjos', 'Intendente', 'Martim Moniz', 'Rossio', 'Baixa Chiado', 'Cais do Sodré']);
+listStations.set('Verde', ['Telheiras', 'Campo Grande', 'Alvalade', 'Roma', 'Areeiro', 'Alameda', 'Arroios', 'Anjos', 'Intendente', 'Martim Moniz', 'Rossio', 'Baixa/Chiado', 'Cais do Sodré']);
 const listDestination = new Map();
 listDestination.set('Amarela', ['Odivelas', 'Rato']);
 listDestination.set('Azul', ['Reboleira', 'Santa Apolónia']);
@@ -38,13 +38,12 @@ function processRequest(e) {
     fetch(`${host}/metro?line=${formData.get('line')}&station=${formData.get('station')}&destination=${formData.get('destination')}`, options)
     .then(data => {return data.json()})
     .then(data=>{
-        console.log(data);
-        let time = parseInt(data.tempoChegada1);
-        info.innerText = Math.floor(time/60) + ":" + ((time % 60) < 10 ? "0" + time % 60 : time % 60);
-        loading.style.display = "none";
-        info.style.display = "block";
-    });
-    
+            let time = parseInt(data.tempoChegada1);
+            info.innerText = Math.floor(time/60) + ":" + ((time % 60) < 10 ? "0" + time % 60 : time % 60);
+            loading.style.display = "none";
+            info.style.display = "block";
+        }
+    );
 }
 
 function updateStations(e) {
